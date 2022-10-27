@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import telran.java2022.student.dto.AddScoreDto;
 import telran.java2022.student.dto.StudentCreateDto;
 import telran.java2022.student.dto.StudentDto;
+import telran.java2022.student.dto.StudentUpdateDto;
 import telran.java2022.student.service.StudentService;
 
 import java.util.List;
@@ -26,34 +27,34 @@ public class StudentController {
 
 
     @DeleteMapping("/student/{id}")
-    public StudentDto removeStudent (@PathVariable Integer id){
+    public StudentDto removeStudent(@PathVariable Integer id) {
         return studentService.removeStudent(id);
     }
 
-
     @PutMapping("/student/{id}")
-    public StudentDto updateStudent(@PathVariable Integer id){
-        return studentService.updateStudent(id);
+    public StudentCreateDto editStudent(@PathVariable Integer id, @RequestBody StudentUpdateDto studentUpdateDto) {
+        return studentService.updateStudent(id, studentUpdateDto);
     }
 
     @PutMapping("/score/student/{id}")
-    public Boolean addScore(@PathVariable Integer id, @RequestBody AddScoreDto score){
-        return studentService.addScore(id, score);
+    public boolean addScore(@PathVariable Integer id, @RequestBody AddScoreDto scoreDto) {
+        return studentService.addScore(id, scoreDto);
     }
 
     @GetMapping("/students/name/{name}")
-    public List<StudentDto> findStudentByName (@PathVariable String name){
-        return studentService.findStudentByName(name);
+    public List<StudentDto> findStudentsByName(@PathVariable String name) {
+        return studentService.findStudentsByName(name);
     }
 
     @PostMapping("/quantity/students")
-    public Integer StudentsQuantity (@RequestBody List<String> studentNames ){
-        return studentService.StudentsQuantity(studentNames);
+    public long studentsNamesQuantity(@RequestBody List<String> names) {
+        return studentService.getStudentsNamesQuantity(names);
     }
 
     @GetMapping("/students/exam/{exam}/minscore/{score}")
-    public  List<StudentDto> findStudentByMinScore(@PathVariable String exam, @PathVariable Integer score ){
-        return studentService.findStudentByMinScore(exam, score);
+    public List<StudentDto> studentsByExamScore(@PathVariable String exam,
+                                                @PathVariable int score) {
+        return studentService.getStudentsByExamScore(exam, score);
     }
 
 }

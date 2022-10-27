@@ -3,6 +3,7 @@ package telran.java2022.student.service;
 import telran.java2022.student.dto.AddScoreDto;
 import telran.java2022.student.dto.StudentCreateDto;
 import telran.java2022.student.dto.StudentDto;
+import telran.java2022.student.dto.StudentUpdateDto;
 
 import java.util.List;
 
@@ -13,15 +14,15 @@ public interface StudentService {
 
     StudentDto removeStudent(Integer id);
 
-    StudentDto updateStudent(Integer id);
+    StudentCreateDto updateStudent(Integer id, StudentUpdateDto studentUpdateDto);
 
     Boolean addScore(Integer id, AddScoreDto scoreDto);
 
-    List<StudentDto> findStudentByName(String name);
+    List<StudentDto> findStudentsByName(String name);
 
-    Integer StudentsQuantity (List<String> studentNames );
+    Long getStudentsNamesQuantity(List<String> names);
 
-    List<StudentDto> findStudentByMinScore(String exam, Integer score);
+    List<StudentDto> getStudentsByExamScore(String exam, int score);
 
 
 
