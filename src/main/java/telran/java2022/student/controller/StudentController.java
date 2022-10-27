@@ -16,7 +16,7 @@ public class StudentController {
 
     @PostMapping("/student")
     public  Boolean addStudent(@RequestBody StudentCreateDto studentCreateDto){
-        return  studentService.addStudent(studentCreateDto);
+        return studentService.addStudent(studentCreateDto);
 
     }
 
@@ -53,7 +53,7 @@ public class StudentController {
 
     @GetMapping("/students/exam/{exam}/minscore/{score}")
     public List<StudentDto> studentsByExamScore(@PathVariable String exam,
-                                                @PathVariable int score) {
+                                                @PathVariable Integer score) {
         return studentService.getStudentsByExamScore(exam, score);
     }
 

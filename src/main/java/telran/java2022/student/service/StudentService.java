@@ -22,7 +22,7 @@ public interface StudentService {
 
     Long getStudentsNamesQuantity(List<String> names);
 
-    List<StudentDto> getStudentsByExamScore(String exam, int score);
+    List<StudentDto> getStudentsByExamScore(String exam, Integer score);
 
 
 
