@@ -1,5 +1,7 @@
 package telran.java2022.student.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import telran.java2022.student.dao.StudentRepository;
 import telran.java2022.student.dto.AddScoreDto;
 import telran.java2022.student.dto.StudentCreateDto;
@@ -9,7 +11,10 @@ import telran.java2022.student.model.Student;
 
 import java.util.List;
 
+@Component
 public class StudentServiceImpl implements StudentService {
+
+    @Autowired
     StudentRepository studentRepository;
 
 

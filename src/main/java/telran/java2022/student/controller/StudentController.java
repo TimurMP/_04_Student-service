@@ -1,6 +1,7 @@
 package telran.java2022.student.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import telran.java2022.student.dto.AddScoreDto;
 import telran.java2022.student.dto.StudentCreateDto;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 public class StudentController {
+    @Autowired
     StudentService studentService;
 
     @PostMapping("/student")
