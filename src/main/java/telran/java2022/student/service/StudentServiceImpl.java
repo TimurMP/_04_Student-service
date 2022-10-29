@@ -42,7 +42,15 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto removeStudent(Integer id) {
-        return null;
+        if (studentRepository.findById(id).isEmpty()) {
+            return null;
+        }
+        Student student = studentRepository.findById(id).orElse(null);
+        studentRepository.deleteById(id);
+        return StudentDto.builder().id(student.getId())
+                .name(student.getName())
+                .scores(student.getScores())
+                .build();
     }
 
     @Override
