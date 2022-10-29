@@ -28,4 +28,10 @@ public class StudentRepositoryImpl implements StudentRepository {
         students.remove(id);
 
     }
+
+    @Override
+    public void updateStudent(Integer id, Student student) {
+        students.put(id, student);
+    }
+
 }

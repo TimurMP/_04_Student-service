@@ -9,6 +9,7 @@ public interface StudentRepository{
     Student save(Student student);
     Optional<Student> findById(int id);
     void deleteById(int id);
+    void updateStudent(Integer id, Student student);
 
 
 

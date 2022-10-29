@@ -55,7 +55,16 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentCreateDto updateStudent(Integer id, StudentUpdateDto studentUpdateDto) {
-        return null;
+        if (studentRepository.findById(id).isEmpty()) {
+            return null;
+        }
+        Student student = new Student(id, studentUpdateDto.getName(),studentUpdateDto.getPassword());
+        studentRepository.updateStudent(id, student);
+        return StudentCreateDto.builder().id(student.getId())
+                .name(student.getName())
+                .password(student.getPassword())
+                .build();
+
     }
 
     @Override
