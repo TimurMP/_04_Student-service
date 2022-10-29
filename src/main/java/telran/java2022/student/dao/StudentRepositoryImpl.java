@@ -52,4 +52,14 @@ public class StudentRepositoryImpl implements StudentRepository {
         return studentList;
     }
 
+    @Override
+    public Long studentsQuantity(List<String> names) {
+        Long amount = 0L;
+        for (String name : names) {
+            List<Student> studentList = findStudentsByName(name);
+            amount+= (long) studentList.size();
+        }
+        return amount;
+    }
+
 }

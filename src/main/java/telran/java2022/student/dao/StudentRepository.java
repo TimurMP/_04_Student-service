@@ -13,6 +13,7 @@ public interface StudentRepository{
     void updateStudent(Integer id, Student student);
     void addScore(Integer id, Student student);
     List<Student> findStudentsByName(String name);
+    Long studentsQuantity (List<String> names);
 
 
 

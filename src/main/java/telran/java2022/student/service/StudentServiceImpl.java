@@ -93,7 +93,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Long getStudentsNamesQuantity(List<String> names) {
-        return null;
+        return studentRepository.studentsQuantity(names);
     }
 
     @Override
