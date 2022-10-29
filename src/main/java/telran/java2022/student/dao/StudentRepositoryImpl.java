@@ -34,4 +34,9 @@ public class StudentRepositoryImpl implements StudentRepository {
         students.put(id, student);
     }
 
+    @Override
+    public void addScore(Integer id, Student student) {
+        students.put(id, student);
+    }
+
 }

@@ -69,7 +69,16 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Boolean addScore(Integer id, AddScoreDto scoreDto) {
-        return null;
+        if (studentRepository.findById(id).isEmpty()) {
+            return false;
+        }
+        Student student = studentRepository.findById(id).orElse(null);
+        student.addScore(scoreDto.getExamName(), scoreDto.getScore());
+        studentRepository.updateStudent(id, student);
+        return true;
+
+
+
     }
 
     @Override

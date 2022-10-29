@@ -11,6 +11,10 @@ public interface StudentRepository{
     void deleteById(int id);
     void updateStudent(Integer id, Student student);
 
+    void addScore(Integer id, Student student);
+
+
+
 
 
 }
