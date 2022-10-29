@@ -3,6 +3,8 @@ package telran.java2022.student.dao;
 import org.springframework.stereotype.Component;
 import telran.java2022.student.model.Student;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,6 +39,17 @@ public class StudentRepositoryImpl implements StudentRepository {
     @Override
     public void addScore(Integer id, Student student) {
         students.put(id, student);
+    }
+
+    @Override
+    public List<Student> findStudentsByName(String name) {
+        List<Student> studentList = new ArrayList<>();
+        for (Map.Entry<Integer, Student> studentEntry : students.entrySet()) {
+            if (studentEntry.getValue().getName().equals(name)){
+                studentList.add(studentEntry.getValue());
+            }
+        }
+        return studentList;
     }
 
 }

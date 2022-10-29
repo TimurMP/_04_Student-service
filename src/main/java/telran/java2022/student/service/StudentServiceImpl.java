@@ -9,6 +9,7 @@ import telran.java2022.student.dto.StudentDto;
 import telran.java2022.student.dto.StudentUpdateDto;
 import telran.java2022.student.model.Student;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -76,14 +77,18 @@ public class StudentServiceImpl implements StudentService {
         student.addScore(scoreDto.getExamName(), scoreDto.getScore());
         studentRepository.updateStudent(id, student);
         return true;
-
-
-
     }
 
     @Override
     public List<StudentDto> findStudentsByName(String name) {
-        return null;
+        List<StudentDto> studentDtoList = new ArrayList<>();
+        List<Student> students = studentRepository.findStudentsByName(name);
+        for (Student student : students) {
+             StudentDto studentDto = new StudentDto(student.getId(), student.getName(), student.getScores());
+            studentDtoList.add(studentDto);
+        }
+
+        return studentDtoList;
     }
 
     @Override
