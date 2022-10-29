@@ -21,7 +21,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Boolean addStudent(StudentCreateDto studentCreateDto) {
-        if (studentRepository.findById(studentCreateDto.getId()).isPresent()){
+        if (studentRepository.findById(studentCreateDto.getId()).isPresent()) {
             return false;
         }
         Student student = new Student(studentCreateDto.getId(),
@@ -59,7 +59,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentRepository.findById(id).isEmpty()) {
             return null;
         }
-        Student student = new Student(id, studentUpdateDto.getName(),studentUpdateDto.getPassword());
+        Student student = new Student(id, studentUpdateDto.getName(), studentUpdateDto.getPassword());
         studentRepository.updateStudent(id, student);
         return StudentCreateDto.builder().id(student.getId())
                 .name(student.getName())
@@ -84,7 +84,7 @@ public class StudentServiceImpl implements StudentService {
         List<StudentDto> studentDtoList = new ArrayList<>();
         List<Student> students = studentRepository.findStudentsByName(name);
         for (Student student : students) {
-             StudentDto studentDto = new StudentDto(student.getId(), student.getName(), student.getScores());
+            StudentDto studentDto = new StudentDto(student.getId(), student.getName(), student.getScores());
             studentDtoList.add(studentDto);
         }
 
@@ -98,6 +98,13 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentDto> getStudentsByExamScore(String exam, Integer score) {
-        return null;
+        List<StudentDto> studentDtoList = new ArrayList<>();
+        List<Student> students = studentRepository.findStudentsByScore(exam, score);
+        for (Student student : students) {
+            StudentDto studentDto = new StudentDto(student.getId(), student.getName(), student.getScores());
+            studentDtoList.add(studentDto);
+        }
+
+        return studentDtoList;
     }
 }

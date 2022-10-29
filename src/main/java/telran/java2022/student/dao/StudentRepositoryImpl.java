@@ -21,8 +21,8 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public Optional<Student>  findById(int id) {
-        return Optional.ofNullable(students.get(id)) ;
+    public Optional<Student> findById(int id) {
+        return Optional.ofNullable(students.get(id));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     public List<Student> findStudentsByName(String name) {
         List<Student> studentList = new ArrayList<>();
         for (Map.Entry<Integer, Student> studentEntry : students.entrySet()) {
-            if (studentEntry.getValue().getName().equals(name)){
+            if (studentEntry.getValue().getName().equals(name)) {
                 studentList.add(studentEntry.getValue());
             }
         }
@@ -57,9 +57,23 @@ public class StudentRepositoryImpl implements StudentRepository {
         Long amount = 0L;
         for (String name : names) {
             List<Student> studentList = findStudentsByName(name);
-            amount+= (long) studentList.size();
+            amount += (long) studentList.size();
         }
         return amount;
+    }
+
+    @Override
+    public List<Student> findStudentsByScore(String exam, Integer score) {
+        List<Student> studentList = new ArrayList<>();
+        for (Map.Entry<Integer, Student> studentEntry : students.entrySet()) {
+            if (studentEntry.getValue().getScores().get(exam) != null &&
+                    studentEntry.getValue().getScores().get(exam) >= score) {
+                studentList.add(studentEntry.getValue());
+            }
+
+        }
+
+        return studentList;
     }
 
 }
