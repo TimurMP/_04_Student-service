@@ -1,23 +1,29 @@
 package telran.java2022.student.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import telran.java2022.student.dao.StudentRepository;
-import telran.java2022.student.dto.AddScoreDto;
+import telran.java2022.student.dto.ScoreDto;
 import telran.java2022.student.dto.StudentCreateDto;
 import telran.java2022.student.dto.StudentDto;
 import telran.java2022.student.dto.StudentUpdateDto;
 import telran.java2022.student.model.Student;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    @Autowired
-    StudentRepository studentRepository;
+//    @Autowired
+    final StudentRepository studentRepository;
 
+//    @Autowired
+//    public StudentServiceImpl(StudentRepository studentRepository) {
+//        this.studentRepository = studentRepository;
+//    }
 
     @Override
     public Boolean addStudent(StudentCreateDto studentCreateDto) {
@@ -56,55 +62,48 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentCreateDto updateStudent(Integer id, StudentUpdateDto studentUpdateDto) {
-        if (studentRepository.findById(id).isEmpty()) {
+        Student student = studentRepository.findById(id).orElse(null);
+        if(student == null) {
             return null;
         }
-        Student student = new Student(id, studentUpdateDto.getName(), studentUpdateDto.getPassword());
-        studentRepository.updateStudent(id, student);
-        return StudentCreateDto.builder().id(student.getId())
+        student.setName(studentUpdateDto.getName());
+        student.setPassword(studentUpdateDto.getPassword());
+        return StudentCreateDto.builder()
+                .id(id)
                 .name(student.getName())
                 .password(student.getPassword())
                 .build();
-
     }
 
     @Override
-    public Boolean addScore(Integer id, AddScoreDto scoreDto) {
-        if (studentRepository.findById(id).isEmpty()) {
+    public Boolean addScore(Integer id, ScoreDto scoreDto) {
+        Student student = studentRepository.findById(id).orElseThrow(null);
+        if(student == null) {
             return false;
         }
-        Student student = studentRepository.findById(id).orElse(null);
-        student.addScore(scoreDto.getExamName(), scoreDto.getScore());
-        studentRepository.updateStudent(id, student);
-        return true;
+        return student.addScore(scoreDto.getExamName(), scoreDto.getScore());
     }
 
     @Override
     public List<StudentDto> findStudentsByName(String name) {
-        List<StudentDto> studentDtoList = new ArrayList<>();
-        List<Student> students = studentRepository.findStudentsByName(name);
-        for (Student student : students) {
-            StudentDto studentDto = new StudentDto(student.getId(), student.getName(), student.getScores());
-            studentDtoList.add(studentDto);
-        }
-
-        return studentDtoList;
+        return studentRepository.findByNameIgnoreCase(name)
+                .map(s -> new StudentDto(s.getId(), s.getName(), s.getScores()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Long getStudentsNamesQuantity(List<String> names) {
-        return studentRepository.studentsQuantity(names);
+        return studentRepository.countByNameInIgnoreCase(names);
     }
 
     @Override
     public List<StudentDto> getStudentsByExamScore(String exam, Integer score) {
-        List<StudentDto> studentDtoList = new ArrayList<>();
-        List<Student> students = studentRepository.findStudentsByScore(exam, score);
-        for (Student student : students) {
-            StudentDto studentDto = new StudentDto(student.getId(), student.getName(), student.getScores());
-            studentDtoList.add(studentDto);
-        }
-
-        return studentDtoList;
+        return StreamSupport.stream(studentRepository.findAll().spliterator(), false)
+                .filter(s -> s.getScores().containsKey(exam) && s.getScores().get(exam) > score)
+                .map(s -> new StudentDto(s.getId(), s.getName(), s.getScores()))
+                .collect(Collectors.toList());
     }
+
+
+
 }

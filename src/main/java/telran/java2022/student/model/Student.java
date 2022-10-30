@@ -1,15 +1,19 @@
 package telran.java2022.student.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+@EqualsAndHashCode(of = "id")
 
 
 public class Student {
+    @Id
     int id;
     @Setter
     String name;
