@@ -68,11 +68,13 @@ public class StudentServiceImpl implements StudentService {
         }
         student.setName(studentUpdateDto.getName());
         student.setPassword(studentUpdateDto.getPassword());
+        studentRepository.save(student);
         return StudentCreateDto.builder()
                 .id(id)
                 .name(student.getName())
                 .password(student.getPassword())
                 .build();
+
     }
 
     @Override
@@ -81,7 +83,10 @@ public class StudentServiceImpl implements StudentService {
         if(student == null) {
             return false;
         }
-        return student.addScore(scoreDto.getExamName(), scoreDto.getScore());
+        student.addScore(scoreDto.getExamName(), scoreDto.getScore());
+        studentRepository.save(student);
+        return true;
+
     }
 
     @Override
