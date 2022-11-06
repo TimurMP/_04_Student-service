@@ -7,11 +7,11 @@ import telran.java2022.student.dto.ScoreDto;
 import telran.java2022.student.dto.StudentCreateDto;
 import telran.java2022.student.dto.StudentDto;
 import telran.java2022.student.dto.StudentUpdateDto;
+import telran.java2022.student.dto.exceptions.StudentNotFoundException;
 import telran.java2022.student.model.Student;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -38,10 +38,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto findStudent(Integer id) {
-        Student student = studentRepository.findById(id).orElse(null);
+        Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
 
 
-        return student == null ? null : StudentDto.builder().id(student.getId())
+        return StudentDto.builder().id(student.getId())
                 .name(student.getName())
                 .scores(student.getScores())
                 .build();
@@ -79,13 +79,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Boolean addScore(Integer id, ScoreDto scoreDto) {
-        Student student = studentRepository.findById(id).orElseThrow(null);
-        if(student == null) {
-            return false;
-        }
-        student.addScore(scoreDto.getExamName(), scoreDto.getScore());
+        Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
+
+        boolean res = student.addScore(scoreDto.getExamName(), scoreDto.getScore());
+
         studentRepository.save(student);
-        return true;
+        return res;
 
     }
 
@@ -103,8 +102,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentDto> getStudentsByExamScore(String exam, Integer score) {
-        return StreamSupport.stream(studentRepository.findAll().spliterator(), false)
-                .filter(s -> s.getScores().containsKey(exam) && s.getScores().get(exam) > score)
+        return studentRepository.findByExamAndScoreGreaterThan(exam, score)
                 .map(s -> new StudentDto(s.getId(), s.getName(), s.getScores()))
                 .collect(Collectors.toList());
     }

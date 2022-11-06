@@ -1,5 +1,6 @@
 package telran.java2022.student.dao;
 
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import telran.java2022.student.model.Student;
 
@@ -12,6 +13,8 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
     long countByNameInIgnoreCase(List<String> names);
 
 
+    @Query("{'scores.?0':  {$gt: ?1}}")
+    Stream<Student> findByExamAndScoreGreaterThan(String exam, int score);
 
 
 
